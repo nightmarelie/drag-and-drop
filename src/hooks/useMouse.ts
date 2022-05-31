@@ -33,20 +33,21 @@ export const useMouse = () => {
     event: new MouseEvent("mousemove"),
   });
 
+  const handleMouseEvent = (event: MouseEvent, state: MouseState) => ({
+    ...state,
+    x: event.clientX,
+    y: event.clientY,
+    dx: 0,
+    dy: 0,
+    event,
+    isPrevLeftClick: state.isLeftClick,
+  });
+
   const handleMouseDown: MouseListener = useCallback(
     (event: MouseEvent) =>
       setMouse((prevMouse) =>
         event.button === 0
-          ? {
-              ...prevMouse,
-              x: event.clientX,
-              y: event.clientY,
-              dx: 0,
-              dy: 0,
-              event,
-              isLeftClick: true,
-              isPrevLeftClick: prevMouse.isLeftClick,
-            }
+          ? handleMouseEvent(event, { ...prevMouse, isLeftClick: true })
           : prevMouse
       ),
     []
@@ -56,16 +57,7 @@ export const useMouse = () => {
     (event: MouseEvent) =>
       setMouse((prevMouse) =>
         event.button === 0
-          ? {
-              ...prevMouse,
-              x: event.clientX,
-              y: event.clientY,
-              dx: 0,
-              dy: 0,
-              event,
-              isLeftClick: false,
-              isPrevLeftClick: prevMouse.isLeftClick,
-            }
+          ? handleMouseEvent(event, { ...prevMouse, isLeftClick: false })
           : prevMouse
       ),
     []
@@ -73,15 +65,13 @@ export const useMouse = () => {
 
   const handleMouseMove: MouseListener = useCallback(
     (event: MouseEvent) =>
-      setMouse((prevMouse) => ({
-        ...prevMouse,
-        x: event.clientX,
-        y: event.clientY,
-        dx: event.clientX - prevMouse.x,
-        dy: event.clientY - prevMouse.y,
-        event,
-        isPrevLeftClick: prevMouse.isLeftClick,
-      })),
+      setMouse((prevMouse) =>
+        handleMouseEvent(event, {
+          ...prevMouse,
+          dx: event.clientX - prevMouse.x,
+          dy: event.clientY - prevMouse.y,
+        })
+      ),
     []
   );
 
@@ -106,5 +96,5 @@ export const useMouse = () => {
     };
   }, [events]);
 
-  return [mouse, setMouse];
+  return mouse;
 };
