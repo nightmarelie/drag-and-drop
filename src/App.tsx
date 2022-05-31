@@ -1,12 +1,16 @@
 import React from "react";
 
-import { DnDmanager } from "./components";
+import { DnDmanager, Draggable, Droppable } from "components";
+import { StylesProvider } from "contexts";
 
 const App = () => {
   return (
-    <div>
-      <DnDmanager />
-    </div>
+    <StylesProvider>
+      <DnDmanager>
+        <Droppable>{() => "droppable"}</Droppable>
+        <Draggable>{() => "draggable"}</Draggable>
+      </DnDmanager>
+    </StylesProvider>
   );
 };
 

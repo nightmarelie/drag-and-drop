@@ -1,10 +1,10 @@
-import React from "react";
+import React, { FC, ReactNode } from "react";
 import { DnDmanagerProvired } from "contexts";
 
-export const DnDmanager = () => {
-  return (
-    <DnDmanagerProvired>
-      <div>DnDmanager</div>
-    </DnDmanagerProvired>
-  );
+type Props = {
+  children: ReactNode | ReactNode[];
+};
+
+export const DnDmanager: FC<Props> = ({ children }) => {
+  return <DnDmanagerProvired>{children}</DnDmanagerProvired>;
 };
