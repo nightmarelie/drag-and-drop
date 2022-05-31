@@ -1,7 +1,13 @@
 import React from "react";
 
+import { DnDmanager } from "./components";
+
 const App = () => {
-  return <div>App</div>;
+  return (
+    <div>
+      <DnDmanager />
+    </div>
+  );
 };
 
 export default App;
