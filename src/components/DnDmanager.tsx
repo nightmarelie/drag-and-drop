@@ -1,19 +1,20 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC, ReactNode, useEffect } from "react";
 
 import { DnDmanagerProvired } from "contexts";
-import { useMouse } from "hooks";
-import { useEffect } from "react";
+import { useMouse, useElementsUnder } from "hooks";
 
 type Props = {
   children: ReactNode | ReactNode[];
 };
 
 export const DnDmanager: FC<Props> = ({ children }) => {
-  const { x, y, dx, dy, isLeftClick, isPrevLeftClick } = useMouse();
+  const mouse = useMouse();
+  const elements = useElementsUnder(mouse.x, mouse.y);
 
   useEffect(() => {
-    console.log(x, y, dx, dy, isLeftClick, isPrevLeftClick);
-  });
+    console.log(mouse);
+    console.log(elements);
+  }, [elements]);
 
   return <DnDmanagerProvired>{children}</DnDmanagerProvired>;
 };

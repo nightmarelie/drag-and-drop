@@ -33,46 +33,57 @@ export const useMouse = () => {
     event: new MouseEvent("mousemove"),
   });
 
-  const handleMouseEvent = (event: MouseEvent, state: MouseState) => ({
-    ...state,
-    x: event.clientX,
-    y: event.clientY,
-    dx: 0,
-    dy: 0,
-    event,
-    isPrevLeftClick: state.isLeftClick,
-  });
+  const handleMouseEvent = useCallback(
+    (
+      event: MouseEvent,
+      prevState: MouseState,
+      overrideState: Partial<MouseState>
+    ): MouseState => ({
+      ...prevState,
+      x: event.clientX,
+      y: event.clientY,
+      dx: 0,
+      dy: 0,
+      event,
+      isPrevLeftClick: prevState.isLeftClick,
+      ...overrideState,
+    }),
+    []
+  );
 
   const handleMouseDown: MouseListener = useCallback(
     (event: MouseEvent) =>
       setMouse((prevMouse) =>
         event.button === 0
-          ? handleMouseEvent(event, { ...prevMouse, isLeftClick: true })
+          ? handleMouseEvent(event, prevMouse, {
+              isLeftClick: true,
+            })
           : prevMouse
       ),
-    []
+    [handleMouseEvent]
   );
 
   const handleMouseUp: MouseListener = useCallback(
     (event: MouseEvent) =>
       setMouse((prevMouse) =>
         event.button === 0
-          ? handleMouseEvent(event, { ...prevMouse, isLeftClick: false })
+          ? handleMouseEvent(event, prevMouse, {
+              isLeftClick: false,
+            })
           : prevMouse
       ),
-    []
+    [handleMouseEvent]
   );
 
   const handleMouseMove: MouseListener = useCallback(
     (event: MouseEvent) =>
       setMouse((prevMouse) =>
-        handleMouseEvent(event, {
-          ...prevMouse,
+        handleMouseEvent(event, prevMouse, {
           dx: event.clientX - prevMouse.x,
           dy: event.clientY - prevMouse.y,
         })
       ),
-    []
+    [handleMouseEvent]
   );
 
   const events: [MouseEvents, MouseListener][] = useMemo(
