@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 type Props = (x: number, y: number) => void;
 
 export const useElementsUnder: Props = (x, y) => {
   const [elements, setElements] = useState<Element[]>([] as Element[]);
 
-  useEffect(() => {
+  const handleElements = useCallback(() => {
     setElements((elements) => {
       const nextElements = document.elementsFromPoint(x, y);
 
@@ -19,6 +19,8 @@ export const useElementsUnder: Props = (x, y) => {
       return elements;
     });
   }, [x, y]);
+
+  useEffect(handleElements);
 
   return elements;
 };

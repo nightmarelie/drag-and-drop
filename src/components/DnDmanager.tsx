@@ -14,7 +14,7 @@ export const DnDmanager: FC<Props> = ({ children }) => {
   useEffect(() => {
     console.log(mouse);
     console.log(elements);
-  }, [elements]);
+  }, [mouse, elements]);
 
   return <DnDmanagerProvired>{children}</DnDmanagerProvired>;
 };
